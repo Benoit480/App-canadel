@@ -43,8 +43,40 @@ async function client(id){
   <section class="card"><h2>Votre satisfaction</h2><div class="stars">${[1,2,3,4,5].map(n=>`<span class="star on" data-n="${n}">⭐</span>`).join("")}</div><label>Commentaire<textarea id="comment" placeholder="Comment s'est passée votre livraison?"></textarea></label></section>
   <section class="card problemBox"><h2>En cas de problème</h2><div class="grid"><label>Article concerné<input id="problemItem" placeholder="Nom ou numéro d'article"></label><label>Quantité<input id="qty" type="number" min="1"></label></div><label style="margin-top:12px">Description du problème<textarea id="problemDesc"></textarea></label><p class="muted">Les photos seront ajoutées dès l'activation de Firebase Storage.</p></section>
   <section class="card"><button id="confirm" class="success">✓ Confirmer la réception</button><p id="cm"></p></section>`;
-  document.querySelectorAll(".star").forEach(x=>x.onclick=()=>{rating=+x.dataset.n;document.querySelectorAll(".star").forEach(y=>y.classList.toggle("on",+y.dataset.n<=rating))});
-  confirm.onclick=async()=>{confirm.disabled=true;cm.textContent="Enregistrement…";try{let issue=document.querySelector('input[name=issue]:checked').value;await updateDoc(doc(db,"orders",id),{received:true,issue,rating,comment:comment.value.trim(),problemItem:problemItem.value.trim(),problemQty:qty.value?+qty.value:null,problemDescription:problemDesc.value.trim(),claimStatus:issue==="Tout est conforme"?"":"Nouvelle",receivedAt:serverTimestamp()});A.innerHTML=`<section class="card hero"><h1>✅ Merci!</h1><p>Votre réception a été enregistrée.</p><p>Commande #${esc(o.number)}</p></section>`}catch(e){confirm.disabled=false;cm.className="error";cm.textContent=e.code||e.message}}
+  document.querySelectorAll(".star").forEach(x=>x.addEventListener("click",()=>{rating=+x.dataset.n;document.querySelectorAll(".star").forEach(y=>y.classList.toggle("on",+y.dataset.n<=rating))}));
+  const confirmBtn=document.getElementById("confirm");
+  const messageEl=document.getElementById("cm");
+  confirmBtn.addEventListener("click",async()=>{
+    confirmBtn.disabled=true;
+    confirmBtn.textContent="Enregistrement…";
+    messageEl.className="muted";
+    messageEl.textContent="Enregistrement de votre réception…";
+    try{
+      const selectedIssue=document.querySelector('input[name="issue"]:checked');
+      if(!selectedIssue) throw new Error("Veuillez sélectionner l’état de la commande.");
+      const issueValue=selectedIssue.value;
+      const commentEl=document.getElementById("comment");
+      const problemItemEl=document.getElementById("problemItem");
+      const qtyEl=document.getElementById("qty");
+      const problemDescEl=document.getElementById("problemDesc");
+      await updateDoc(doc(db,"orders",id),{
+        received:true, issue:issueValue, rating,
+        comment:commentEl?.value.trim()||"",
+        problemItem:problemItemEl?.value.trim()||"",
+        problemQty:qtyEl?.value ? Number(qtyEl.value) : null,
+        problemDescription:problemDescEl?.value.trim()||"",
+        claimStatus:issueValue==="Tout est conforme" ? "" : "Nouvelle",
+        receivedAt:serverTimestamp()
+      });
+      A.innerHTML=`<section class="card hero"><h1>✅ Réception confirmée</h1><p>Merci! Votre réception a été enregistrée avec succès.</p><p>Commande #${esc(o.number)}</p></section>`;
+    }catch(err){
+      console.error(err);
+      confirmBtn.disabled=false;
+      confirmBtn.textContent="✓ Confirmer la réception";
+      messageEl.className="error";
+      messageEl.textContent="❌ Impossible de confirmer : "+(err.code||err.message);
+    }
+  });
  }catch(e){A.innerHTML=`<section class="card"><h2>Erreur</h2><p>${esc(e.message)}</p></section>`}
 }
 function adminDetail(o){
