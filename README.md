@@ -1,36 +1,33 @@
-# App Canadel V3 — QR universel
+# App Canadel V4 — reproduction fidèle de la maquette
 
-## Changement principal
-Il n'y a plus un QR par commande. Le même QR universel est imprimé sur toutes les boîtes. Le client scanne puis entre son numéro de commande et ses informations.
+Version GitHub Pages prête à publier.
 
-## V3
-- QR universel
-- Logo Canadel visuellement intégré au centre du QR
-- Formulaire client
-- Détection de numéro de commande déjà confirmé
-- État de livraison
-- Satisfaction 1–5
-- Article, quantité et description en cas de problème
-- Sélection/prévisualisation de photos
-- Tableau de bord
-- Réceptions
-- Recherche
-- Réclamations
-- Statistiques
-- Page imprimable du QR universel
+## Visuel
+Cette version reprend la direction visuelle de la maquette de référence:
+- bleu/noir profond
+- logo Canadel centré sur l'expérience client
+- champs bleu nuit
+- boutons verts
+- cartes et bordures bleu acier
+- écran d'état de livraison
+- satisfaction par étoiles
+- ajout/prévisualisation de photos
+- dashboard ordinateur avec navigation verticale
+- cartes Total réceptions / Conformes / Avec problème / Satisfaction
+- QR universel avec logo Canadel au centre
 
-## GitHub
-Remplacer les fichiers du dépôt App-canadel par le contenu de ce ZIP.
+## Fonctionnement
+Le QR est unique pour toutes les boîtes et pointe vers la racine de l'application.
+Le client entre lui-même son numéro de commande.
 
-## Firestore
-La V3 utilise la collection `receipts`. Publier `firestore.rules` pendant les tests.
+## Installation GitHub
+Décompresser le ZIP et déposer directement son contenu à la racine du dépôt GitHub Pages.
 
-## À sécuriser avant production
-Les règles de test sont ouvertes. Ajouter Firebase Authentication pour l'administration avant utilisation publique.
+## Firebase
+La configuration du projet app-canadel est déjà incluse.
+Publier aussi les règles `firestore.rules` pour les essais.
+
+IMPORTANT: les règles actuelles sont volontairement permissives pour le développement. Il faut sécuriser l'administration avec Firebase Authentication avant une mise en production publique.
 
 ## Photos
-Le formulaire permet déjà de choisir et prévisualiser des photos. Leur téléversement permanent sera activé après configuration de Firebase Storage.
-
-
-## V3.1 — Design maquette
-Interface entièrement refaite en style clair Canadel: blanc, gris doux, accents rouge Canadel, cartes et formulaires identiques à la direction visuelle des maquettes précédentes. La logique V3 QR universel est conservée.
+La sélection et la prévisualisation sont présentes. Le stockage permanent des images nécessitera l'activation de Firebase Storage.
