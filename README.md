@@ -49,12 +49,6 @@ Le logo Canadel est superposé directement au centre du QR universel, sans cadre
 Le QR et le logo Canadel sont maintenant fusionnés dans une seule image PNG dans le navigateur.
 Un appui long, l'ouverture, l'enregistrement ou l'impression du QR conserve donc le logo au centre.
 
-## V4.7 — Hero identique
-La section d'accueil utilise directement la maquette approuvée (meubles + logo + titre + sous-titre) comme un seul visuel.
-Le logo et les textes HTML superposés sont masqués afin d'éliminer tout doublon.
-Le ratio de la carte est verrouillé pour éviter de couper le contenu sur iPhone.
-
-## V5.1 — image dans le rectangle seulement
-Retour au fond bleu nuit uni pour l'application.
-L'image de meubles reste uniquement dans le rectangle « Confirmer ma livraison ».
-Aucune photo de meubles derrière les sections Informations de commande, État de la livraison ou les autres cartes.
+## V5.2 — rendu identique approuvé
+Cette version reprend le rendu visuel approuvé par l'utilisateur : photos de meubles très pâles, cartes bleu nuit centrées et proportions mobiles correspondantes. Le QR fusionné et la configuration Firebase existante sont conservés.
+Tous les fichiers nécessaires à GitHub Pages sont à la racine du ZIP; aucun dossier assets n'est requis.
