@@ -118,3 +118,8 @@ main{max-width:760px !important;margin:0 auto !important}
   .card h2{font-size:24px !important}
   input,textarea,select{width:100% !important;box-sizing:border-box !important}
 }
+
+#langBtn{min-width:52px;font-weight:900}
+@media(max-width:620px){
+ #langBtn{min-width:48px;padding:10px 9px!important;margin-right:5px!important}
+}

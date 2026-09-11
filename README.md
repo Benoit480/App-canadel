@@ -52,3 +52,9 @@ Un appui long, l'ouverture, l'enregistrement ou l'impression du QR conserve donc
 ## V5.2 — rendu identique approuvé
 Cette version reprend le rendu visuel approuvé par l'utilisateur : photos de meubles très pâles, cartes bleu nuit centrées et proportions mobiles correspondantes. Le QR fusionné et la configuration Firebase existante sont conservés.
 Tous les fichiers nécessaires à GitHub Pages sont à la racine du ZIP; aucun dossier assets n'est requis.
+
+## V5.3 — Français / English
+Un bouton ENG est ajouté dans l'en-tête client. Il traduit instantanément toute l'interface client en anglais et devient FR pour revenir au français.
+Le choix est mémorisé sur l'appareil avec localStorage.
+L'administration demeure en français.
+Les nouvelles réceptions enregistrent aussi la langue utilisée (`fr` ou `en`).
