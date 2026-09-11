@@ -49,5 +49,7 @@ Le logo Canadel est superposé directement au centre du QR universel, sans cadre
 Le QR et le logo Canadel sont maintenant fusionnés dans une seule image PNG dans le navigateur.
 Un appui long, l'ouverture, l'enregistrement ou l'impression du QR conserve donc le logo au centre.
 
-## V4.5 — meubles Canadel en arrière-plan
-La carte « Confirmer ma livraison » utilise maintenant le visuel de meubles pâles validé comme arrière-plan, avec un voile sombre pour conserver la lisibilité du logo et du texte. L'image est intégrée directement au code : aucun dossier assets.
+## V4.6 — Hero propre
+Correction du doublon dans la section « Confirmer ma livraison ».
+L'arrière-plan ne contient plus le logo ni le texte de la maquette : uniquement un décor pâle de meubles.
+Le vrai logo et le vrai texte de l'application sont affichés une seule fois par-dessus.
