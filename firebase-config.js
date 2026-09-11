@@ -1,11 +1,8 @@
-// 1) Crée un projet Firebase.
-// 2) Active Firestore + Storage.
-// 3) Colle ici la configuration de ton application Web Firebase.
 export const firebaseConfig = {
-  apiKey: "REMPLACER",
-  authDomain: "REMPLACER.firebaseapp.com",
-  projectId: "REMPLACER",
-  storageBucket: "REMPLACER.firebasestorage.app",
-  messagingSenderId: "REMPLACER",
-  appId: "REMPLACER"
+  apiKey: "AIzaSyDrxG90dTH_2iVOP3gCzyIiAQPVNMwXAEk",
+  authDomain: "app-canadel.firebaseapp.com",
+  projectId: "app-canadel",
+  storageBucket: "app-canadel.firebasestorage.app",
+  messagingSenderId: "1086880616276",
+  appId: "1:1086880616276:web:44d7061164a65eea6ac2c1"
 };
