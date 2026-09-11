@@ -1,0 +1,9 @@
+{
+  "name": "Suivi Commandes QR",
+  "short_name": "Commandes QR",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#08111d",
+  "theme_color": "#0b1523",
+  "icons": []
+}
