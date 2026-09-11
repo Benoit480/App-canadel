@@ -31,3 +31,13 @@ IMPORTANT: les règles actuelles sont volontairement permissives pour le dévelo
 
 ## Photos
 La sélection et la prévisualisation sont présentes. Le stockage permanent des images nécessitera l'activation de Firebase Storage.
+
+## V4.1 iPhone Fix
+- Logo Canadel embarqué directement dans le code pour éliminer les images cassées sur GitHub Pages.
+- Formulaire forcé en une seule colonne sur iPhone.
+- Correction des débordements des champs.
+- Espacements, titres, cartes et boutons réajustés à partir du test réel iPhone.
+
+## V4.2 — transfert GitHub simplifié
+Le dossier `assets` a été retiré. Le logo Canadel est intégré directement dans le code.
+Tous les fichiers à transférer sur GitHub sont maintenant au même niveau.

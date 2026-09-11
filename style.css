@@ -19,3 +19,35 @@ label{display:block;font-weight:650;margin-top:12px}input,textarea,select{width:
 @media(min-width:850px){body.admin main{max-width:1260px;padding-left:210px}.tabs.adminSide{position:fixed;left:20px;top:88px;width:175px;display:flex;flex-direction:column;align-items:stretch;background:#071824;padding:8px}.tabs.adminSide button{text-align:left;width:100%;padding:12px}.tabs.adminSide:before{content:"Canadel";font-weight:800;font-size:18px;text-align:center;padding:13px;border-bottom:1px solid #29445a;margin-bottom:5px}}
 @media(max-width:620px){header{height:62px;padding:0 12px}.brand img{width:39px;height:39px}.brand b{font-size:17px}.brand small{font-size:10px}header button{padding:9px 11px}main{padding:11px}.card{padding:15px}.hero{margin:8px 0}.hero img{width:120px}.hero h1{font-size:27px}.stats{grid-template-columns:1fr 1fr}.stat{padding:13px}.stat b{font-size:27px}.qrwrap>img.qr{width:260px;height:260px}.qrlogo{width:67px;height:67px}}
 @media print{header,.tabs,.noPrint{display:none!important}body{background:#fff;color:#000}.card{background:#fff;border:0;box-shadow:none}.printSheet{display:block}}
+
+/* V4.1 — corrections réelles iPhone */
+@media(max-width:700px){
+  body{overflow-x:hidden}
+  header{padding:0 16px;height:74px}
+  header .brand{min-width:0}
+  header .brand img{width:46px;height:46px;flex:0 0 46px}
+  header .brand b{font-size:18px}
+  header .brand small{font-size:11px}
+  header .secondary{font-size:13px;padding:11px 12px}
+  main{width:100%;max-width:100%;padding:14px}
+  .card{width:100%;max-width:100%;margin:0 0 13px;padding:20px;border-radius:12px}
+  .hero{max-width:none;text-align:left;padding:24px}
+  .hero img{width:122px;height:auto;margin:0 auto 25px;display:block}
+  .hero h1{font-size:30px;line-height:1.1;margin-bottom:14px}
+  .hero p{font-size:17px;line-height:1.45;margin:0}
+  .grid{display:block !important}
+  .grid label{display:block;width:100%;max-width:100%;margin:18px 0 0}
+  input,textarea,select{display:block;width:100%;max-width:100%;min-width:0}
+  input[type="date"]{min-height:52px}
+  h2{font-size:24px;line-height:1.15}
+  .choice{width:100%;min-height:54px;font-size:16px}
+  .stars{font-size:34px;justify-content:space-between;max-width:330px}
+  .upload{width:100%}
+  #submit{width:100%;min-height:54px;font-size:16px}
+}
+@media(max-width:390px){
+  header .brand small{display:none}
+  header .secondary{font-size:12px;padding:10px}
+  .hero h1{font-size:27px}
+  .card{padding:17px}
+}
