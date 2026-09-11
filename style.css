@@ -51,3 +51,32 @@ label{display:block;font-weight:650;margin-top:12px}input,textarea,select{width:
   .hero h1{font-size:27px}
   .card{padding:17px}
 }
+
+/* V4.3 — logo Canadel directement dans le QR, sans bordure blanche */
+.qrwrap{
+  position:relative;
+  display:inline-block;
+  background:#fff;
+}
+.qrwrap>img.qr{
+  display:block;
+}
+.qrlogo{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  transform:translate(-50%,-50%) !important;
+  width:82px !important;
+  height:auto !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  border:0 !important;
+  border-radius:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+@media(max-width:620px){
+  .qrlogo{width:72px !important}
+}

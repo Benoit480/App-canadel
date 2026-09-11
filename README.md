@@ -41,3 +41,6 @@ La sélection et la prévisualisation sont présentes. Le stockage permanent des
 ## V4.2 — transfert GitHub simplifié
 Le dossier `assets` a été retiré. Le logo Canadel est intégré directement dans le code.
 Tous les fichiers à transférer sur GitHub sont maintenant au même niveau.
+
+## V4.3 — QR logo sans bordure
+Le logo Canadel est superposé directement au centre du QR universel, sans cadre, sans fond blanc ajouté, sans padding et sans bordure.
