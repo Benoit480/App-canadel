@@ -1,24 +1,36 @@
-# App Canadel V2
-Version V2 du suivi de commandes QR.
+# App Canadel V3 — QR universel
 
-## Inclus
+## Changement principal
+Il n'y a plus un QR par commande. Le même QR universel est imprimé sur toutes les boîtes. Le client scanne puis entre son numéro de commande et ses informations.
+
+## V3
+- QR universel
+- Logo Canadel visuellement intégré au centre du QR
+- Formulaire client
+- Détection de numéro de commande déjà confirmé
+- État de livraison
+- Satisfaction 1–5
+- Article, quantité et description en cas de problème
+- Sélection/prévisualisation de photos
 - Tableau de bord
-- Commandes et création
-- QR unique
-- Fiche client
-- Satisfaction
-- Signalement de bris/manquant
-- Réclamations et statuts
+- Réceptions
+- Recherche
+- Réclamations
 - Statistiques
-- Fiche imprimable
+- Page imprimable du QR universel
 
-## Installation GitHub
-Remplacer les fichiers du dépôt App-canadel par ceux du ZIP.
+## GitHub
+Remplacer les fichiers du dépôt App-canadel par le contenu de ce ZIP.
 
-## Important
-Les règles Firestore restent ouvertes pour la phase de test. La prochaine étape avant production est Firebase Authentication + règles sécurisées.
-Les photos nécessitent Firebase Storage, qui sera activé dans une prochaine étape.
+## Firestore
+La V3 utilise la collection `receipts`. Publier `firestore.rules` pendant les tests.
+
+## À sécuriser avant production
+Les règles de test sont ouvertes. Ajouter Firebase Authentication pour l'administration avant utilisation publique.
+
+## Photos
+Le formulaire permet déjà de choisir et prévisualiser des photos. Leur téléversement permanent sera activé après configuration de Firebase Storage.
 
 
-## V2.1
-Correction du bouton Confirmer la réception sur Safari/iPhone. Les éléments du formulaire sont maintenant référencés explicitement et les erreurs sont affichées à l'écran.
+## V3.1 — Design maquette
+Interface entièrement refaite en style clair Canadel: blanc, gris doux, accents rouge Canadel, cartes et formulaires identiques à la direction visuelle des maquettes précédentes. La logique V3 QR universel est conservée.
