@@ -54,5 +54,11 @@ La section d'accueil utilise directement la maquette approuvée (meubles + logo 
 Le logo et les textes HTML superposés sont masqués afin d'éliminer tout doublon.
 Le ratio de la carte est verrouillé pour éviter de couper le contenu sur iPhone.
 
-## V4.8 — visuel approuvé intégré
-Le visuel approuvé avec les grandes photos de meubles très pâles est maintenant réellement intégré dans l'application comme arrière-plan général. Il ne s'agit plus seulement d'une référence de design.
+## V4.9 — rendu exact validé
+Le dernier visuel validé est maintenant intégré comme source d'arrière-plan sur toute la hauteur.
+Les grandes photos de meubles pâles restent visibles autour des cartes bleu nuit.
+Sur mobile, les cartes sont volontairement plus étroites pour reproduire les bandes de meubles visibles de chaque côté.
+
+## V5.0 — fond meubles propre
+Correction de la V4.9 : aucun texte, formulaire ou logo de la maquette n'est utilisé comme arrière-plan général.
+Le hero « Confirmer ma livraison » est restauré, et le reste de la page utilise seulement un décor pâle de meubles derrière les vraies cartes de l'application.
