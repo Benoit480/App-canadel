@@ -23,30 +23,58 @@ function needFirebase(){if(!configured){appEl.innerHTML=`<section class="card"><
 
 async function admin(){
  if(!needFirebase())return;
- const snap=await getDocs(collection(db,"orders"));
- const orders=snap.docs.map(d=>({id:d.id,...d.data()}));
- const received=orders.filter(o=>o.received).length, problems=orders.filter(o=>o.issue&&o.issue!=="Tout est conforme").length;
+
+ // Affiche l'administration immédiatement; Firestore charge ensuite.
  appEl.innerHTML=`<section class="grid">
- <div class="stat"><b>${orders.length}</b>Commandes</div><div class="stat"><b>${received}</b>Reçues</div>
- <div class="stat"><b>${problems}</b>Problèmes</div><div class="stat"><b>${orders.length-received}</b>En attente</div></section>
+ <div class="stat"><b id="stTotal">…</b>Commandes</div><div class="stat"><b id="stReceived">…</b>Reçues</div>
+ <div class="stat"><b id="stProblems">…</b>Problèmes</div><div class="stat"><b id="stWaiting">…</b>En attente</div></section>
  <section class="card"><h2>Nouvelle commande</h2><div class="grid">
- <label>No commande<input id="n"></label><label>Client<input id="c"></label><label>Date livraison<input id="d" type="date"></label>
- </div><div class="actions"><button id="create">Créer + générer QR</button></div><div id="created"></div></section>
- <section class="card"><h2>Commandes</h2><div class="tableWrap"><table><thead><tr><th>No</th><th>Client</th><th>Livraison</th><th>Statut</th><th>Satisfaction</th><th></th></tr></thead>
- <tbody>${orders.map(o=>`<tr><td>${esc(o.number||o.id)}</td><td>${esc(o.client)}</td><td>${esc(o.deliveryDate)}</td><td>${o.received?`<span class="badge ${o.issue==="Tout est conforme"?"green":"red"}">${esc(o.issue)}</span>`:`<span class="badge yellow">En attente</span>`}</td><td>${o.rating?`${o.rating}/5`:"—"}</td><td><button onclick="location.search='?commande=${encodeURIComponent(o.id)}'">Voir</button></td></tr>`).join("")}</tbody></table></div></section>`;
+ <label>No commande<input id="n" autocomplete="off"></label><label>Client<input id="c" autocomplete="off"></label><label>Date livraison<input id="d" type="date"></label>
+ </div><div class="actions"><button id="create">Créer + générer QR</button></div><p id="createStatus" class="muted"></p><div id="created"></div></section>
+ <section class="card"><h2>Commandes</h2><p id="loadStatus" class="muted">Chargement des commandes…</p>
+ <div class="tableWrap"><table><thead><tr><th>No</th><th>Client</th><th>Livraison</th><th>Statut</th><th>Satisfaction</th><th></th></tr></thead>
+ <tbody id="ordersBody"></tbody></table></div></section>`;
+
  document.querySelector("#create").onclick=createOrder;
+
+ try{
+   const snap=await getDocs(collection(db,"orders"));
+   const orders=snap.docs.map(d=>({id:d.id,...d.data()}));
+   const received=orders.filter(o=>o.received).length;
+   const problems=orders.filter(o=>o.issue&&o.issue!=="Tout est conforme").length;
+   document.querySelector("#stTotal").textContent=orders.length;
+   document.querySelector("#stReceived").textContent=received;
+   document.querySelector("#stProblems").textContent=problems;
+   document.querySelector("#stWaiting").textContent=orders.length-received;
+   document.querySelector("#loadStatus").textContent="";
+   document.querySelector("#ordersBody").innerHTML=orders.map(o=>`<tr><td>${esc(o.number||o.id)}</td><td>${esc(o.client)}</td><td>${esc(o.deliveryDate)}</td><td>${o.received?`<span class="badge ${o.issue==="Tout est conforme"?"green":"red"}">${esc(o.issue)}</span>`:`<span class="badge yellow">En attente</span>`}</td><td>${o.rating?`${o.rating}/5`:"—"}</td><td><button onclick="location.search='?commande=${encodeURIComponent(o.id)}'">Voir</button></td></tr>`).join("");
+ }catch(err){
+   console.error(err);
+   document.querySelector("#loadStatus").innerHTML=`⚠️ Impossible de lire Firestore : <b>${esc(err.code||err.message)}</b>. Vérifie que Firestore Database est créé et que les règles sont publiées.`;
+   ["stTotal","stReceived","stProblems","stWaiting"].forEach(id=>document.querySelector("#"+id).textContent="—");
+ }
 }
 async function createOrder(){
  const number=document.querySelector("#n").value.trim(),client=document.querySelector("#c").value.trim(),deliveryDate=document.querySelector("#d").value;
- if(!number||!client)return alert("Numéro de commande et client requis.");
- const id=crypto.randomUUID();
- await setDoc(doc(db,"orders",id),{number,client,deliveryDate,received:false,createdAt:serverTimestamp()});
- const url=location.origin+location.pathname+"?commande="+encodeURIComponent(id);
- const box=document.querySelector("#created");box.innerHTML=`<hr><h3>QR de ${esc(number)}</h3><div class="qrbox"><canvas id="qr"></canvas></div><p class="muted">${esc(url)}</p><button id="print">Imprimer</button>`;
- QRCode.toCanvas(document.querySelector("#qr"),url,{width:220});
- document.querySelector("#print").onclick=()=>print();
+ const status=document.querySelector("#createStatus"),btn=document.querySelector("#create");
+ if(!number||!client){status.textContent="⚠️ Numéro de commande et client requis.";return}
+ btn.disabled=true; btn.textContent="Création…"; status.textContent="Enregistrement dans Firestore…";
+ try{
+   const id=crypto.randomUUID();
+   await setDoc(doc(db,"orders",id),{number,client,deliveryDate,received:false,createdAt:serverTimestamp()});
+   const url=location.origin+location.pathname+"?commande="+encodeURIComponent(id);
+   const box=document.querySelector("#created");
+   box.innerHTML=`<hr><h3>✅ Commande ${esc(number)} créée</h3><div class="qrbox"><canvas id="qr"></canvas></div><p class="muted">${esc(url)}</p><button id="print">Imprimer</button>`;
+   QRCode.toCanvas(document.querySelector("#qr"),url,{width:220},err=>{if(err) console.error(err)});
+   document.querySelector("#print").onclick=()=>print();
+   status.textContent="Commande enregistrée avec succès.";
+ }catch(err){
+   console.error(err);
+   status.innerHTML=`❌ La commande n'a pas été créée. Erreur Firebase : <b>${esc(err.code||err.message)}</b>.`;
+ }finally{
+   btn.disabled=false; btn.textContent="Créer + générer QR";
+ }
 }
-
 async function client(id){
  if(!needFirebase())return;
  const refDoc=doc(db,"orders",id),snap=await getDoc(refDoc);
