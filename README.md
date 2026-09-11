@@ -53,3 +53,6 @@ Un appui long, l'ouverture, l'enregistrement ou l'impression du QR conserve donc
 La section d'accueil utilise directement la maquette approuvée (meubles + logo + titre + sous-titre) comme un seul visuel.
 Le logo et les textes HTML superposés sont masqués afin d'éliminer tout doublon.
 Le ratio de la carte est verrouillé pour éviter de couper le contenu sur iPhone.
+
+## V4.8 — visuel approuvé intégré
+Le visuel approuvé avec les grandes photos de meubles très pâles est maintenant réellement intégré dans l'application comme arrière-plan général. Il ne s'agit plus seulement d'une référence de design.
