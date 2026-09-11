@@ -44,3 +44,7 @@ Tous les fichiers à transférer sur GitHub sont maintenant au même niveau.
 
 ## V4.3 — QR logo sans bordure
 Le logo Canadel est superposé directement au centre du QR universel, sans cadre, sans fond blanc ajouté, sans padding et sans bordure.
+
+## V4.4 — QR fusionné
+Le QR et le logo Canadel sont maintenant fusionnés dans une seule image PNG dans le navigateur.
+Un appui long, l'ouverture, l'enregistrement ou l'impression du QR conserve donc le logo au centre.

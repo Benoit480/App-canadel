@@ -80,3 +80,7 @@ label{display:block;font-weight:650;margin-top:12px}input,textarea,select{width:
 @media(max-width:620px){
   .qrlogo{width:72px !important}
 }
+
+/* V4.4 — QR fusionné: l'image affichée contient réellement le logo */
+#finalQR{display:block;width:300px;height:300px;object-fit:contain}
+@media(max-width:620px){#finalQR{width:260px;height:260px}}
