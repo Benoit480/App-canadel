@@ -1,10 +1,12 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    match /orders/{orderId}/{fileName} {
-      allow read, write: if request.resource == null ||
-        (request.resource.size < 10 * 1024 * 1024 &&
-         request.resource.contentType.matches('image/.*'));
+    match /receipts/{receiptId}/{fileName} {
+      allow read: if true;
+      allow create: if request.resource != null
+                    && request.resource.size < 10 * 1024 * 1024
+                    && request.resource.contentType.matches('image/.*');
+      allow update, delete: if false;
     }
   }
 }

@@ -1,8 +1,9 @@
 import {firebaseConfig} from "./firebase-config.js";
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {getFirestore,collection,doc,getDoc,getDocs,setDoc,updateDoc,serverTimestamp,query,where} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import {getStorage,ref,uploadBytes,getDownloadURL} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
 
-const fb=initializeApp(firebaseConfig),db=getFirestore(fb),A=document.getElementById("app");
+const fb=initializeApp(firebaseConfig),db=getFirestore(fb),storage=getStorage(fb),A=document.getElementById("app");
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const today=()=>new Date().toISOString().slice(0,10);
 const fmt=t=>t?.toDate?t.toDate().toLocaleString("fr-CA"):"—";
@@ -16,7 +17,7 @@ const T={
   compliant:"Tout est conforme",damaged:"Produit endommagé",missing:"Produit manquant",wrong:"Mauvais produit",other:"Autre problème",
   satisfaction:"Satisfaction",comment:"Commentaire",commentPh:"Comment s'est passée votre livraison?",problem:"En cas de problème",
   item:"Article concerné",itemPh:"Nom ou numéro d'article",qty:"Quantité",desc:"Description du problème",photos:"📷 Photos",
-  photoHelp:"La sélection de photos est prête. L'envoi Firebase Storage sera activé à l'étape Storage.",
+  photoHelp:"Ajoutez des photos du produit ou du problème. Elles seront jointes à votre réception.",
   submit:"✓ Confirmer la réception",required:"Numéro de commande et nom du client requis.",checking:"Vérification…",
   checkingOrder:"Vérification de la commande…",duplicate:"Une réception existe déjà pour ce numéro de commande. Communiquez avec Canadel si une correction est nécessaire.",
   success:"✅ Réception confirmée",thanks:"Merci! La réception de la commande",sent:"Votre réponse a été transmise à Canadel.",sellerFollowup:"⚠️ Une anomalie a été signalée avec votre commande. Veuillez communiquer avec votre vendeur afin d’assurer le suivi de votre dossier."
@@ -28,7 +29,7 @@ const T={
   compliant:"Everything is correct",damaged:"Damaged product",missing:"Missing product",wrong:"Wrong product",other:"Other issue",
   satisfaction:"Satisfaction",comment:"Comments",commentPh:"How did your delivery go?",problem:"If there is a problem",
   item:"Item concerned",itemPh:"Item name or number",qty:"Quantity",desc:"Problem description",photos:"📷 Photos",
-  photoHelp:"Photo selection is ready. Firebase Storage upload will be enabled at the Storage step.",
+  photoHelp:"Add photos of the product or issue. They will be attached to your delivery receipt.",
   submit:"✓ Confirm receipt",required:"Order number and customer name are required.",checking:"Checking…",
   checkingOrder:"Checking the order…",duplicate:"A receipt has already been recorded for this order number. Please contact Canadel if a correction is required.",
   success:"✅ Receipt confirmed",thanks:"Thank you! Receipt of order",sent:"Your response has been sent to Canadel.",sellerFollowup:"⚠️ An issue has been reported with your order. Please contact your salesperson to follow up on your order."
@@ -70,7 +71,21 @@ async function reception(){
      const dup=await getDocs(query(collection(db,"receipts"),where("orderNo","==",orderNo)));
      if(!dup.empty){throw new Error(tr("duplicate"));}
      let issue=document.querySelector('input[name="issue"]:checked').value,id=crypto.randomUUID();
-     await setDoc(doc(db,"receipts",id),{orderNo,customer,receivedDate:document.getElementById("receivedDate").value,contact:document.getElementById("contact").value.trim(),issue,rating,language:lang,comment:document.getElementById("comment").value.trim(),problemItem:document.getElementById("item").value.trim(),problemQty:document.getElementById("qty").value?Number(document.getElementById("qty").value):null,problemDescription:document.getElementById("desc").value.trim(),claimStatus:issue==="compliant"?"":"Nouvelle",createdAt:serverTimestamp(),photoUrls:[]});
+     const files=[...document.getElementById("photos").files];
+     const photoUrls=[];
+     if(files.length){
+       msg.textContent=lang==="fr"?"Téléversement des photos…":"Uploading photos…";
+       for(let i=0;i<files.length;i++){
+         const file=files[i];
+         if(!file.type.startsWith("image/"))continue;
+         if(file.size>10*1024*1024)throw new Error(lang==="fr"?"Chaque photo doit faire moins de 10 Mo.":"Each photo must be under 10 MB.");
+         const safe=(file.name||`photo-${i+1}.jpg`).replace(/[^a-zA-Z0-9._-]/g,"_");
+         const storageRef=ref(storage,`receipts/${id}/${Date.now()}-${i}-${safe}`);
+         await uploadBytes(storageRef,file,{contentType:file.type||"image/jpeg"});
+         photoUrls.push(await getDownloadURL(storageRef));
+       }
+     }
+     await setDoc(doc(db,"receipts",id),{orderNo,customer,receivedDate:document.getElementById("receivedDate").value,contact:document.getElementById("contact").value.trim(),issue,rating,language:lang,comment:document.getElementById("comment").value.trim(),problemItem:document.getElementById("item").value.trim(),problemQty:document.getElementById("qty").value?Number(document.getElementById("qty").value):null,problemDescription:document.getElementById("desc").value.trim(),claimStatus:issue==="compliant"?"":"Nouvelle",createdAt:serverTimestamp(),photoUrls});
      const followup=issue==="compliant"?"":`<div class="seller-followup">${tr("sellerFollowup")}</div>`;
      A.innerHTML=`<section class="card hero">${logo()}<h1>${tr("success")}</h1><p>${tr("thanks")} <b>#${esc(orderNo)}</b> ${lang==="fr"?"a été enregistrée.":"has been recorded."}</p><p class="muted">${tr("sent")}</p>${followup}</section>`;
    }catch(e){btn.disabled=false;btn.textContent=tr("submit");msg.className="error";msg.textContent="❌ "+(e.code||e.message)}
@@ -105,6 +120,7 @@ function wireDetails(o){
      <div class="detailWide"><span>Commentaire</span><b>${esc(x.comment||"Aucun commentaire")}</b></div>
      ${problem?`<div><span>Article concerné</span><b>${esc(x.problemItem||x.item||"—")}</b></div><div><span>Quantité</span><b>${esc(x.problemQty||x.qty||"—")}</b></div><div class="detailWide"><span>Description du problème</span><b>${esc(x.problemDescription||x.description||"—")}</b></div><div><span>Statut de réclamation</span><b>${esc(x.claimStatus||"Nouvelle")}</b></div>`:""}
      <div><span>Date / heure d'envoi</span><b>${esc(fullDate(x.createdAt))}</b></div>
+     <div class="detailWide"><span>Photos</span>${Array.isArray(x.photoUrls)&&x.photoUrls.length?`<div class="detailPhotos">${x.photoUrls.map((u,i)=>`<a href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}" alt="Photo ${i+1}"></a>`).join("")}</div>`:`<b>Aucune photo</b>`}</div>
     </div>
    </section>`;
    document.body.appendChild(overlay);

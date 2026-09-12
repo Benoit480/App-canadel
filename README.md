@@ -20,3 +20,11 @@ Lorsqu'une réception est confirmée avec une anomalie, le client reçoit un mes
 
 ## V6.3.1
 Correction de la V6.3 : retour à la base V6.2 fonctionnelle et ajout isolé du bouton « Voir détails » dans l'administration.
+
+
+## V6.4 — Photos Firebase Storage
+Les photos choisies par le client sont téléversées dans Firebase Storage sous `receipts/<id>/...`.
+Leurs URL sont enregistrées dans `receipts.photoUrls` dans Firestore et elles apparaissent dans Administration → Voir détails.
+
+IMPORTANT : activez Firebase Storage dans la console Firebase puis publiez le fichier `storage.rules`.
+Les règles fournies sont adaptées au prototype sans authentification : lecture publique et création d'images de moins de 10 Mo seulement. Pour la production, sécurisez l'administration avec Firebase Authentication.

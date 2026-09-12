@@ -75,3 +75,8 @@
 .detailGrid b{display:block;color:#fff;overflow-wrap:anywhere;white-space:pre-wrap}
 .detailWide{grid-column:1/-1}
 @media(max-width:700px){.detailGrid{grid-template-columns:1fr}.detailWide{grid-column:auto}.detailModal{padding:18px!important}}
+
+/* V6.4 — photos Firebase Storage */
+.detailPhotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:8px}
+.detailPhotos a{display:block}
+.detailPhotos img{display:block;width:100%;height:110px;object-fit:cover;border-radius:10px;border:1px solid #456277}
