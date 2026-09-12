@@ -12,3 +12,7 @@ Les expérimentations visuelles V4/V5 et les fonds de meubles ont été retirés
 
 ## V6.1 — correction iPhone
 Le visuel V3 est conservé. Sur téléphone, la grille du formulaire passe maintenant à une seule colonne afin d'éviter le chevauchement et la coupure des champs.
+
+
+## V6.2 — suivi anomalie
+Lorsqu'une réception est confirmée avec une anomalie, le client reçoit un message lui demandant de communiquer avec son vendeur. Le message est bilingue FR/EN. Aucun message supplémentaire n'est affiché lorsque « Tout est conforme » est sélectionné.

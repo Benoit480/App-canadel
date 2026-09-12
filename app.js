@@ -19,7 +19,7 @@ const T={
   photoHelp:"La sélection de photos est prête. L'envoi Firebase Storage sera activé à l'étape Storage.",
   submit:"✓ Confirmer la réception",required:"Numéro de commande et nom du client requis.",checking:"Vérification…",
   checkingOrder:"Vérification de la commande…",duplicate:"Une réception existe déjà pour ce numéro de commande. Communiquez avec Canadel si une correction est nécessaire.",
-  success:"✅ Réception confirmée",thanks:"Merci! La réception de la commande",sent:"Votre réponse a été transmise à Canadel."
+  success:"✅ Réception confirmée",thanks:"Merci! La réception de la commande",sent:"Votre réponse a été transmise à Canadel.",sellerFollowup:"⚠️ Une anomalie a été signalée avec votre commande. Veuillez communiquer avec votre vendeur afin d’assurer le suivi de votre dossier."
  },
  en:{
   confirm:"Confirm my delivery",intro:"Please take a few moments to confirm receipt of your order.",
@@ -31,7 +31,7 @@ const T={
   photoHelp:"Photo selection is ready. Firebase Storage upload will be enabled at the Storage step.",
   submit:"✓ Confirm receipt",required:"Order number and customer name are required.",checking:"Checking…",
   checkingOrder:"Checking the order…",duplicate:"A receipt has already been recorded for this order number. Please contact Canadel if a correction is required.",
-  success:"✅ Receipt confirmed",thanks:"Thank you! Receipt of order",sent:"Your response has been sent to Canadel."
+  success:"✅ Receipt confirmed",thanks:"Thank you! Receipt of order",sent:"Your response has been sent to Canadel.",sellerFollowup:"⚠️ An issue has been reported with your order. Please contact your salesperson to follow up on your order."
  }
 };
 const tr=k=>T[lang][k];
@@ -71,7 +71,8 @@ async function reception(){
      if(!dup.empty){throw new Error(tr("duplicate"));}
      let issue=document.querySelector('input[name="issue"]:checked').value,id=crypto.randomUUID();
      await setDoc(doc(db,"receipts",id),{orderNo,customer,receivedDate:document.getElementById("receivedDate").value,contact:document.getElementById("contact").value.trim(),issue,rating,language:lang,comment:document.getElementById("comment").value.trim(),problemItem:document.getElementById("item").value.trim(),problemQty:document.getElementById("qty").value?Number(document.getElementById("qty").value):null,problemDescription:document.getElementById("desc").value.trim(),claimStatus:issue==="compliant"?"":"Nouvelle",createdAt:serverTimestamp(),photoUrls:[]});
-     A.innerHTML=`<section class="card hero">${logo()}<h1>${tr("success")}</h1><p>${tr("thanks")} <b>#${esc(orderNo)}</b> ${lang==="fr"?"a été enregistrée.":"has been recorded."}</p><p class="muted">${tr("sent")}</p></section>`;
+     const followup=issue==="compliant"?"":`<div class="seller-followup">${tr("sellerFollowup")}</div>`;
+     A.innerHTML=`<section class="card hero">${logo()}<h1>${tr("success")}</h1><p>${tr("thanks")} <b>#${esc(orderNo)}</b> ${lang==="fr"?"a été enregistrée.":"has been recorded."}</p><p class="muted">${tr("sent")}</p>${followup}</section>`;
    }catch(e){btn.disabled=false;btn.textContent=tr("submit");msg.className="error";msg.textContent="❌ "+(e.code||e.message)}
  });
 }
