@@ -18,5 +18,5 @@ Le visuel V3 est conservé. Sur téléphone, la grille du formulaire passe maint
 Lorsqu'une réception est confirmée avec une anomalie, le client reçoit un message lui demandant de communiquer avec son vendeur. Le message est bilingue FR/EN. Aucun message supplémentaire n'est affiché lorsque « Tout est conforme » est sélectionné.
 
 
-## V6.3 — détails complets administration
-Un bouton « Voir détails » est ajouté aux réceptions. Il ouvre une fiche complète avec toutes les données enregistrées du formulaire et les informations d'anomalie. Les photos s'afficheront ici lorsqu'elles auront des URL Firebase Storage enregistrées.
+## V6.3.1
+Correction de la V6.3 : retour à la base V6.2 fonctionnelle et ajout isolé du bouton « Voir détails » dans l'administration.

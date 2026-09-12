@@ -82,49 +82,41 @@ async function admin(view){document.body.classList.add("admin");
  try{let o=await getAll(); if(view==="dashboard")dashboard(o);else if(view==="receipts")receipts(o);else if(view==="claims")claims(o);else if(view==="stats")stats(o);else universalQR();wire()}catch(e){A.innerHTML=tabs(view)+`<section class="card"><p class="error">${esc(e.code||e.message)}</p></section>`;wire()}
 }
 function status(x){const ok=x.issue==="Tout est conforme"||x.issue==="compliant";const names={damaged:"Produit endommagé",missing:"Produit manquant",wrong:"Mauvais produit",other:"Autre problème"};return ok?`<span class="badge green">Conforme</span>`:`<span class="badge red">${esc(names[x.issue]||x.issue)}</span>`}
-function issueName(v){return ({compliant:"Tout est conforme",damaged:"Produit endommagé",missing:"Produit manquant",wrong:"Mauvais produit",other:"Autre problème"})[v]||v||"—"}
-function createdText(v){
- try{
-   if(!v)return "—";
-   const d=v.toDate?v.toDate():new Date(v);
-   return d.toLocaleString("fr-CA",{dateStyle:"long",timeStyle:"short"});
- }catch(e){return "—"}
-}
-function table(o){return `<div class="tablewrap"><table><thead><tr><th>Date</th><th>Commande</th><th>Client</th><th>État</th><th>Note</th><th>Réclamation</th><th></th></tr></thead><tbody>${o.map(x=>`<tr><td>${esc(x.receivedDate)}</td><td>${esc(x.orderNo)}</td><td>${esc(x.customer)}</td><td>${status(x)}</td><td>${x.rating||"—"}/5</td><td>${esc(x.claimStatus||"—")}</td><td><button class="detailBtn secondary" data-detail="${esc(x.id)}">Voir détails</button></td></tr>`).join("")}</tbody></table></div>`}
+function table(o){return `<div class="tablewrap"><table><thead><tr><th>Date</th><th>Commande</th><th>Client</th><th>État</th><th>Note</th><th>Réclamation</th><th>Détails</th></tr></thead><tbody>${o.map(x=>`<tr><td>${esc(x.receivedDate)}</td><td>${esc(x.orderNo)}</td><td>${esc(x.customer)}</td><td>${status(x)}</td><td>${x.rating||"—"}/5</td><td>${esc(x.claimStatus||"—")}</td><td><button class="secondary detailBtn" data-detail-id="${esc(x.id)}">Voir détails</button></td></tr>`).join("")}</tbody></table></div>`}
+
+function issueLabel(v){return ({compliant:"Tout est conforme","Tout est conforme":"Tout est conforme",damaged:"Produit endommagé",missing:"Produit manquant",wrong:"Mauvais produit",other:"Autre problème"})[v]||v||"—"}
+function fullDate(v){try{return v?.toDate?v.toDate().toLocaleString("fr-CA"):v?new Date(v).toLocaleString("fr-CA"):"—"}catch(e){return "—"}}
 function wireDetails(o){
- document.querySelectorAll("[data-detail]").forEach(b=>b.addEventListener("click",()=>{
-   const x=o.find(r=>r.id===b.dataset.detail); if(!x)return;
-   const photos=(x.photoUrls||[]).filter(Boolean);
-   const hasProblem=x.issue!=="compliant"&&x.issue!=="Tout est conforme";
-   const box=document.createElement("div"); box.className="detailOverlay";
-   box.innerHTML=`<div class="detailModal card">
-    <div class="detailHead"><h2>Détails de la réception</h2><button class="detailClose secondary">✕</button></div>
+ document.querySelectorAll("[data-detail-id]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+   const x=o.find(r=>String(r.id)===String(btn.dataset.detailId)); if(!x)return;
+   const problem=!(x.issue==="compliant"||x.issue==="Tout est conforme");
+   const overlay=document.createElement("div");
+   overlay.className="detailOverlay";
+   overlay.innerHTML=`<section class="card detailModal">
+    <div class="detailHead"><h2>Détails de la réception</h2><button type="button" class="secondary detailClose">✕</button></div>
     <div class="detailGrid">
-      <div><span>Numéro de commande</span><b>${esc(x.orderNo||"—")}</b></div>
-      <div><span>Client / entreprise</span><b>${esc(x.customer||"—")}</b></div>
-      <div><span>Date de réception</span><b>${esc(x.receivedDate||"—")}</b></div>
-      <div><span>Personne ayant reçu</span><b>${esc(x.contact||"—")}</b></div>
-      <div><span>État de la livraison</span><b>${esc(issueName(x.issue))}</b></div>
-      <div><span>Satisfaction</span><b>${x.rating||"—"} / 5</b></div>
-      <div><span>Langue utilisée</span><b>${x.language==="en"?"Anglais":"Français"}</b></div>
-      <div><span>Date / heure d'envoi</span><b>${esc(createdText(x.createdAt))}</b></div>
-      <div class="detailWide"><span>Commentaire</span><b>${esc(x.comment||"Aucun commentaire")}</b></div>
-      ${hasProblem?`<div><span>Article concerné</span><b>${esc(x.problemItem||"—")}</b></div>
-      <div><span>Quantité</span><b>${esc(x.problemQty??"—")}</b></div>
-      <div class="detailWide"><span>Description du problème</span><b>${esc(x.problemDescription||"—")}</b></div>
-      <div><span>Statut de la réclamation</span><b>${esc(x.claimStatus||"Nouvelle")}</b></div>`:""}
-      <div class="detailWide"><span>Photos</span>${photos.length?`<div class="detailPhotos">${photos.map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}" alt="Photo"></a>`).join("")}</div>`:`<b>Aucune photo enregistrée</b>`}</div>
+     <div><span>Numéro de commande</span><b>${esc(x.orderNo||"—")}</b></div>
+     <div><span>Client / entreprise</span><b>${esc(x.customer||"—")}</b></div>
+     <div><span>Date de réception</span><b>${esc(x.receivedDate||"—")}</b></div>
+     <div><span>Votre nom</span><b>${esc(x.contact||x.name||"—")}</b></div>
+     <div><span>État de la livraison</span><b>${esc(issueLabel(x.issue))}</b></div>
+     <div><span>Satisfaction</span><b>${esc(x.rating||"—")} / 5</b></div>
+     <div class="detailWide"><span>Commentaire</span><b>${esc(x.comment||"Aucun commentaire")}</b></div>
+     ${problem?`<div><span>Article concerné</span><b>${esc(x.problemItem||x.item||"—")}</b></div><div><span>Quantité</span><b>${esc(x.problemQty||x.qty||"—")}</b></div><div class="detailWide"><span>Description du problème</span><b>${esc(x.problemDescription||x.description||"—")}</b></div><div><span>Statut de réclamation</span><b>${esc(x.claimStatus||"Nouvelle")}</b></div>`:""}
+     <div><span>Date / heure d'envoi</span><b>${esc(fullDate(x.createdAt))}</b></div>
     </div>
-   </div>`;
-   document.body.appendChild(box);
-   const close=()=>box.remove();
-   box.querySelector(".detailClose").addEventListener("click",close);
-   box.addEventListener("click",e=>{if(e.target===box)close()});
+   </section>`;
+   document.body.appendChild(overlay);
+   const close=()=>overlay.remove();
+   overlay.querySelector(".detailClose").addEventListener("click",close);
+   overlay.addEventListener("click",e=>{if(e.target===overlay)close()});
+  });
  });
 }
-function dashboard(o){let p=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant"),avg=o.length?(o.reduce((a,x)=>a+(+x.rating||0),0)/o.length).toFixed(1):"—";A.innerHTML=tabs("dashboard")+`<section class="stats"><div class="stat"><b>${o.length}</b>Total réceptions</div><div class="stat"><b>${o.length-p.length}</b>Conformes</div><div class="stat"><b>${p.length}</b>Avec problème</div><div class="stat"><b>${avg}</b>Satisfaction /5</div></section><section class="card"><h2>Réceptions récentes</h2>${table(o.slice(-10).reverse())}</section>`;wire();wireDetails(o)}
-function receipts(o){A.innerHTML=tabs("receipts")+`<section class="card"><h2>Réceptions</h2><input id="search" class="search" placeholder="Rechercher commande ou client…">${table(o.reverse())}</section>`;wire();wireDetails(o);search.addEventListener("input",()=>{let q=search.value.toLowerCase();document.querySelectorAll("tbody tr").forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?"":"none")})}
-function claims(o){let c=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant");A.innerHTML=tabs("claims")+`<section class="card"><h2>Réclamations</h2>${c.length?table(c.reverse()):'<p class="muted">Aucune réclamation.</p>'}</section>`;wire();wireDetails(o)}
+function dashboard(o){let p=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant"),avg=o.length?(o.reduce((a,x)=>a+(+x.rating||0),0)/o.length).toFixed(1):"—";const shown=o.slice(-10).reverse();A.innerHTML=tabs("dashboard")+`<section class="stats"><div class="stat"><b>${o.length}</b>Total réceptions</div><div class="stat"><b>${o.length-p.length}</b>Conformes</div><div class="stat"><b>${p.length}</b>Avec problème</div><div class="stat"><b>${avg}</b>Satisfaction /5</div></section><section class="card"><h2>Réceptions récentes</h2>${table(shown)}</section>`;wire();wireDetails(shown)}
+function receipts(o){const shown=[...o].reverse();A.innerHTML=tabs("receipts")+`<section class="card"><h2>Réceptions</h2><input id="search" class="search" placeholder="Rechercher commande ou client…">${table(shown)}</section>`;wire();wireDetails(shown);const searchEl=document.getElementById("search");searchEl.addEventListener("input",()=>{let q=searchEl.value.toLowerCase();document.querySelectorAll("tbody tr").forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?"":"none")})}
+function claims(o){let c=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant").reverse();A.innerHTML=tabs("claims")+`<section class="card"><h2>Réclamations</h2>${c.length?table(c):'<p class="muted">Aucune réclamation.</p>'}</section>`;wire();wireDetails(c)}
 function stats(o){let p=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant"),avg=o.length?(o.reduce((a,x)=>a+(+x.rating||0),0)/o.length).toFixed(1):"—";A.innerHTML=tabs("stats")+`<section class="stats"><div class="stat"><b>${o.length}</b>Réceptions</div><div class="stat"><b>${avg}</b>Note moyenne</div><div class="stat"><b>${p.length}</b>Problèmes</div><div class="stat"><b>${o.length?Math.round(p.length/o.length*100):0}%</b>Taux de problème</div></section>`;wire()}
 
 async function buildBrandedQR(url){
