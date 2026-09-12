@@ -58,3 +58,10 @@ Un bouton ENG est ajouté dans l'en-tête client. Il traduit instantanément tou
 Le choix est mémorisé sur l'appareil avec localStorage.
 L'administration demeure en français.
 Les nouvelles réceptions enregistrent aussi la langue utilisée (`fr` ou `en`).
+
+
+## V5.8 — Image 2
+- `furniture-background.jpg` est une vraie image de fond distincte contenant uniquement le décor/meubles.
+- Aucun champ, texte, bouton ou carte de l'application n'est intégré à cette image.
+- Toute l'interface demeure en HTML/CSS et fonctionnelle.
+- FR/ENG, Firebase, QR et administration sont conservés.
