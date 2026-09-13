@@ -87,3 +87,28 @@
 .canadelHeroImage{width:100%;line-height:0}
 .canadelHeroImage img{display:block;width:100%!important;height:auto!important;border-radius:17px!important;object-fit:cover}
 @media(max-width:700px){.canadelHeroCard{padding:0!important}.canadelHeroImage img{width:100%!important}}
+
+/* V7.3 — Hero Canadel : une seule ligne autour de l'image */
+.canadelHeroCard{
+  border:0 !important;
+  background:transparent !important;
+  border-radius:18px !important;
+  overflow:visible !important;
+  padding:0 !important;
+}
+.canadelHeroImage{
+  border:1px solid #31506a;
+  border-radius:18px;
+  overflow:hidden;
+  line-height:0;
+  background:#102234;
+}
+.canadelHeroImage img{
+  display:block;
+  width:100% !important;
+  height:auto !important;
+  border:0 !important;
+  outline:0 !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+}
