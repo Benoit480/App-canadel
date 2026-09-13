@@ -1,22 +1,13 @@
-# LIVRIVO — V7
+# LIVRIVO V7.2 — Plateforme / Canadel
 
-Nouvelle identité de l’application de confirmation de livraison.
+Version prête pour GitHub Pages.
 
-- Nom : LIVRIVO
-- Signature : Recevez • Vérifiez • Confirmez
-- Style sombre V3 conservé
-- FR / ENG conservé
-- Firebase / Firestore conservé
-- Administration + Voir détails conservés
-- Message vendeur en cas d’anomalie conservé
-- Photos retirées pour l’instant
-- QR universel conservé et marqué LIVRIVO
+- LIVRIVO demeure la plateforme.
+- Canadel demeure la marque visible pour cette expérience client.
+- L'en-tête client reprend le visuel Canadel demandé (image de mobilier + logo Canadel + « Confirmer ma livraison »).
+- La mention « Propulsé par LIVRIVO » a été retirée du carré Canadel.
+- LIVRIVO reste visible dans la barre supérieure.
+- Firebase / Firestore et l'administration existante sont conservés.
+- Photos de réclamation toujours reportées pour l'instant.
 
-Le projet Firebase existant reste inchangé pour éviter de casser les données actuelles.
-
-
-## V7.1 — architecture plateforme
-- LIVRIVO est maintenant la plateforme.
-- Canadel est affiché comme entreprise cliente sur l’écran de confirmation.
-- Mention « Propulsé par LIVRIVO » / « Powered by LIVRIVO ».
-- Base préparée pour accueillir d’autres entreprises plus tard.
+Décompresser puis déposer les fichiers à la racine du dépôt GitHub Pages.

@@ -81,3 +81,9 @@
 
 /* Client branding inside LIVRIVO */
 .clientBrand{margin:0 auto 18px;display:flex;flex-direction:column;align-items:center;gap:4px}.clientLogo{width:86px;height:86px;border-radius:18px;display:grid;place-items:center;background:#fff;color:#111;font-size:48px;font-weight:950;box-shadow:0 12px 28px #0005}.clientBrand strong{font-size:30px;letter-spacing:1px;margin-top:8px}.clientBrand small{color:#9fb1c4;font-weight:700;font-size:14px}@media(max-width:620px){.clientLogo{width:76px;height:76px;font-size:42px}.clientBrand strong{font-size:27px}}
+
+/* V7.2 — Canadel reste la marque client; LIVRIVO reste la plateforme */
+.canadelHeroCard{padding:0!important;overflow:hidden;background:#102234}
+.canadelHeroImage{width:100%;line-height:0}
+.canadelHeroImage img{display:block;width:100%!important;height:auto!important;border-radius:17px!important;object-fit:cover}
+@media(max-width:700px){.canadelHeroCard{padding:0!important}.canadelHeroImage img{width:100%!important}}
