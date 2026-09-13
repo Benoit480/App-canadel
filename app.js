@@ -46,7 +46,7 @@ updateLangButton();
 adminBtn.addEventListener("click",()=>admin("dashboard"));
 if(params.get("admin")==="1") admin("dashboard"); else reception();
 
-function logo(){return `<div class="livrivoHeroLogo"><span>L</span><strong>LIVRIVO</strong><small>Recevez • Vérifiez • Confirmez</small></div>`}
+function clientBrand(){return `<div class="clientBrand"><div class="clientLogo">C</div><strong>Canadel</strong><small>${lang==="fr"?"Propulsé par LIVRIVO":"Powered by LIVRIVO"}</small></div>`}
 async function getAll(){let s=await getDocs(collection(db,"receipts"));return s.docs.map(d=>({id:d.id,...d.data()}))}
 function tabs(a){let x=[["dashboard","▣  Tableau de bord"],["receipts","▰  Réceptions"],["claims","◷  Réclamations"],["stats","▥  Statistiques"],["qr","⌗  QR universel"]];return `<div class="tabs adminSide noPrint">${x.map(([k,v])=>`<button data-tab="${k}" class="${a===k?"active":""}">${v}</button>`).join("")}</div>`}
 function wire(){document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>admin(b.dataset.tab)))}
@@ -55,7 +55,7 @@ async function reception(){
  document.body.classList.remove("admin"); updateLangButton();
  let rating=5;
  const issues=[tr("compliant"),tr("damaged"),tr("missing"),tr("wrong"),tr("other")];
- A.innerHTML=`<section class="card hero">${logo()}<h1>${tr("confirm")}</h1><p class="muted">${tr("intro")}</p></section>
+ A.innerHTML=`<section class="card hero">${clientBrand()}<h1>${tr("confirm")}</h1><p class="muted">${tr("intro")}</p></section>
  <section class="card"><h2>${tr("info")}</h2><div class="grid"><label>${tr("order")}<input id="orderNo" autocomplete="off" placeholder="${tr("orderPh")}"></label><label>${tr("client")}<input id="customer" autocomplete="organization" placeholder="${tr("clientPh")}"></label><label>${tr("date")}<input id="receivedDate" type="date" value="${today()}"></label><label>${tr("name")}<input id="contact" autocomplete="name" placeholder="${tr("namePh")}"></label></div></section>
  <section class="card"><h2>${tr("state")}</h2>${issues.map((x,i)=>`<label class="choice"><input type="radio" name="issue" value="${["compliant","damaged","missing","wrong","other"][i]}" ${i===0?"checked":""}>${x}</label>`).join("")}<h3>${tr("satisfaction")}</h3><div class="stars">${[1,2,3,4,5].map(n=>`<span class="star on" data-n="${n}">⭐</span>`).join("")}</div><label>${tr("comment")}<textarea id="comment" placeholder="${tr("commentPh")}"></textarea></label></section>
  <section class="card problem" id="problemBox"><h2>${tr("problem")}</h2><div class="grid"><label>${tr("item")}<input id="item" placeholder="${tr("itemPh")}"></label><label>${tr("qty")}<input id="qty" type="number" min="1"></label></div><label>${tr("desc")}<textarea id="desc"></textarea></label></section>

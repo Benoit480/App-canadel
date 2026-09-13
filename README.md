@@ -13,3 +13,10 @@ Nouvelle identité de l’application de confirmation de livraison.
 - QR universel conservé et marqué LIVRIVO
 
 Le projet Firebase existant reste inchangé pour éviter de casser les données actuelles.
+
+
+## V7.1 — architecture plateforme
+- LIVRIVO est maintenant la plateforme.
+- Canadel est affiché comme entreprise cliente sur l’écran de confirmation.
+- Mention « Propulsé par LIVRIVO » / « Powered by LIVRIVO ».
+- Base préparée pour accueillir d’autres entreprises plus tard.
