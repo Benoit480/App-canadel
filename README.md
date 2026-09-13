@@ -13,4 +13,4 @@ Version prête pour GitHub Pages.
 Décompresser puis déposer les fichiers à la racine du dépôt GitHub Pages.
 
 
-V7.3: correction visuelle de l’en-tête Canadel — suppression de la double bordure, une seule ligne autour de l’image.
+V7.4: correction visuelle de l’en-tête Canadel — suppression de la double bordure, une seule ligne autour de l’image.

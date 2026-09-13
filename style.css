@@ -112,3 +112,33 @@
   box-shadow:none !important;
   border-radius:0 !important;
 }
+
+/* V7.4 — correction définitive : aucune double bordure sur le hero Canadel */
+.canadelHeroCard{
+  border:none !important;
+  outline:none !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  padding:0 !important;
+  overflow:visible !important;
+}
+.canadelHeroImage{
+  border:1px solid #31506a !important;
+  outline:none !important;
+  box-shadow:none !important;
+  border-radius:18px !important;
+  overflow:hidden !important;
+  padding:0 !important;
+  background:transparent !important;
+}
+.canadelHeroImage img{
+  display:block !important;
+  width:100% !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:none !important;
+  outline:none !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+}
