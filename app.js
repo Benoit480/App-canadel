@@ -132,13 +132,13 @@ async function buildBrandedQR(url){
   const boxW=260, boxH=96, x=(size-boxW)/2, y=(size-boxH)/2;
   ctx.fillStyle="#ffffff"; ctx.fillRect(x,y,boxW,boxH);
   ctx.fillStyle="#071522"; ctx.font="900 42px system-ui, sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
-  ctx.fillText("LIVRIVO",size/2,size/2);
+  ctx.fillText("CONFIRVO",size/2,size/2);
   return c.toDataURL("image/png");
 }
 
 async function universalQR(){
  let url=location.origin+location.pathname;
- A.innerHTML=tabs("qr")+`<section class="card printSheet"><h1>Scannez ici</h1><p>Confirmez votre livraison avec LIVRIVO</p><div class="qrbox"><img id="finalQR" class="qr" alt="QR universel LIVRIVO" style="display:block;width:300px;height:300px"></div><p class="muted">${esc(url)}</p><div class="actions noPrint"><button class="blue" onclick="print()">Imprimer le QR universel</button></div><p><b>Un seul QR pour toutes les boîtes.</b></p></section>`;
+ A.innerHTML=tabs("qr")+`<section class="card printSheet"><h1>Scannez ici</h1><p>Confirmez votre livraison avec CONFIRVO</p><div class="qrbox"><img id="finalQR" class="qr" alt="QR universel CONFIRVO" style="display:block;width:300px;height:300px"></div><p class="muted">${esc(url)}</p><div class="actions noPrint"><button class="blue" onclick="print()">Imprimer le QR universel</button></div><p><b>Un seul QR pour toutes les boîtes.</b></p></section>`;
  wire();
  try{
    const finalSrc=await buildBrandedQR(url);
