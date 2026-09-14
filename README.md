@@ -1,20 +1,22 @@
-# CONFIRVO V7.2 — Plateforme / Canadel
+# App Canadel V6 — Style V3
 
-Version prête pour GitHub Pages.
+Cette version restaure le visuel de la V3 (fond, cartes, proportions et style général)
+tout en conservant les fonctions récentes de l'application :
+- FR / ENG
+- Firebase / Firestore
+- administration
+- QR fusionné avec le logo Canadel
 
-- CONFIRVO demeure la plateforme.
-- Canadel demeure la marque visible pour cette expérience client.
-- L'en-tête client reprend le visuel Canadel demandé (image de mobilier + logo Canadel + « Confirmer ma livraison »).
-- La mention « Propulsé par CONFIRVO » a été retirée du carré Canadel.
-- CONFIRVO reste visible dans la barre supérieure.
-- Firebase / Firestore et l'administration existante sont conservés.
-- Photos de réclamation toujours reportées pour l'instant.
-
-Décompresser puis déposer les fichiers à la racine du dépôt GitHub Pages.
+Les expérimentations visuelles V4/V5 et les fonds de meubles ont été retirés.
 
 
-V7.4: correction visuelle de l’en-tête Canadel — suppression de la double bordure, une seule ligne autour de l’image.
+## V6.1 — correction iPhone
+Le visuel V3 est conservé. Sur téléphone, la grille du formulaire passe maintenant à une seule colonne afin d'éviter le chevauchement et la coupure des champs.
 
-## V1.1
-- Logo CONFIRVO officiel intégré en haut à gauche à la place du nom texte/icône.
-- En-tête responsive iPhone.
+
+## V6.2 — suivi anomalie
+Lorsqu'une réception est confirmée avec une anomalie, le client reçoit un message lui demandant de communiquer avec son vendeur. Le message est bilingue FR/EN. Aucun message supplémentaire n'est affiché lorsque « Tout est conforme » est sélectionné.
+
+
+## V6.3.1
+Correction de la V6.3 : retour à la base V6.2 fonctionnelle et ajout isolé du bouton « Voir détails » dans l'administration.
