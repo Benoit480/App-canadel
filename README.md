@@ -1,4 +1,4 @@
-# App Canadel V8 — Administration sécurisée
+# App Canadel V8.1 — Administration sécurisée
 
 Version basée sur V7.1 avec Firebase Authentication pour l'administration.
 
@@ -17,3 +17,10 @@ Version basée sur V7.1 avec Firebase Authentication pour l'administration.
 - La suppression reste interdite.
 
 IMPORTANT : publier `firestore.rules` dans Firebase Console est indispensable. Le fichier présent dans GitHub ne modifie pas les règles Firebase automatiquement.
+
+
+## V8.1 — Accès administration discret
+- Le bouton Administration est masqué sur la page publique.
+- Accès privé : ajoutez `?admin=1` à l’adresse de l’application.
+- Exemple GitHub Pages : `https://benoit480.github.io/App-canadel/?admin=1`
+- Firebase Authentication et les règles Firestore restent obligatoires.
