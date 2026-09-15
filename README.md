@@ -29,3 +29,6 @@ V8.2 — Correctif iPhone/Safari
 - Corrige le rendu fantôme pouvant afficher deux fois la carte « Informations de commande » pendant le défilement.
 - Aucun changement au formulaire, à Firebase ou à l'administration.
 - Compatible avec Cloudflare Pages : https://candelvalid.pages.dev
+
+
+V8.3: correctif iPhone/Safari du double rendu visuel. Retrait des calques GPU ajoutés en V8.2 et cache-busting des fichiers CSS/JS.

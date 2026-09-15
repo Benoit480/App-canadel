@@ -83,24 +83,9 @@
 .loginCard h1{text-align:center;margin-bottom:4px}.loginCard>.muted{text-align:center;margin-bottom:24px}
 .loginMark{text-align:center;font-size:46px;margin-bottom:8px}.loginCard button{width:100%;margin-top:14px}
 
-/* V8.2 — correctif iPhone/Safari : évite le double rendu fantôme des cartes au défilement */
-@media (max-width: 700px){
-  header{
-    -webkit-backdrop-filter:none !important;
-    backdrop-filter:none !important;
-    background:#081725 !important;
-  }
-  #app{
-    position:relative;
-    isolation:isolate;
-  }
-  #app > .card,
-  #app > .hero{
-    position:relative;
-    z-index:1;
-    transform:translateZ(0);
-    -webkit-transform:translateZ(0);
-    backface-visibility:hidden;
-    -webkit-backface-visibility:hidden;
-  }
+/* V8.3 — iPhone/Safari: rendu normal, sans calques GPU sur les cartes */
+@media (max-width:700px){
+  header{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#081725!important}
+  #app{position:static!important;isolation:auto!important}
+  #app > .card,#app > .hero{transform:none!important;-webkit-transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important}
 }
