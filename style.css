@@ -75,3 +75,5 @@
 .detailGrid b{display:block;color:#fff;overflow-wrap:anywhere;white-space:pre-wrap}
 .detailWide{grid-column:1/-1}
 @media(max-width:700px){.detailGrid{grid-template-columns:1fr}.detailWide{grid-column:auto}.detailModal{padding:18px!important}}
+
+.canadelHero{padding:0!important;border:0!important;background:transparent!important;overflow:hidden;border-radius:18px}.canadelHero img{display:block;width:100%;height:auto;border-radius:18px;object-fit:cover}
