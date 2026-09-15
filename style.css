@@ -105,3 +105,43 @@
 .deleteReceiptBtn{width:auto!important;background:#8b2630!important;border-color:#b43b47!important;color:#fff!important}
 .deleteReceiptBtn:disabled{opacity:.6}
 @media(max-width:700px){.claimStatusSelect{min-width:138px;font-size:14px!important}.detailActions .deleteReceiptBtn{width:100%!important}}
+
+/* V8.6 — fiche détails admin défilable sur iPhone */
+.detailOverlay{
+  overflow:hidden!important;
+  overscroll-behavior:contain;
+}
+.detailModal{
+  display:flex!important;
+  flex-direction:column!important;
+  width:min(760px,100%)!important;
+  max-height:calc(100dvh - 24px)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+  margin:auto!important;
+}
+.detailHead{
+  flex:0 0 auto;
+}
+.detailGrid,.detailActions{
+  flex:0 0 auto;
+}
+.detailActions{
+  padding-bottom:max(12px,env(safe-area-inset-bottom));
+}
+@media(max-width:700px){
+  .detailOverlay{
+    align-items:stretch!important;
+    justify-content:center!important;
+    padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))!important;
+  }
+  .detailModal{
+    max-height:calc(100dvh - max(16px,env(safe-area-inset-top)) - max(16px,env(safe-area-inset-bottom)))!important;
+    height:auto!important;
+    padding:18px!important;
+    margin:auto!important;
+  }
+}

@@ -44,3 +44,8 @@ V8.4 — Entête client simplifié: retrait de la grande image, conservation du 
 - La suppression Firestore est permise uniquement à un utilisateur Firebase Authentication connecté.
 
 IMPORTANT : publier aussi le fichier `firestore.rules` dans Firebase Console > Firestore Database > Rules, sinon le bouton de suppression sera refusé par Firebase.
+
+## V8.6
+- Corrige le défilement de la fenêtre Détails de la réception sur iPhone/Safari.
+- Le contenu peut maintenant défiler jusqu'au bouton de suppression.
+- Aucun changement aux données Firebase ni au formulaire client.
