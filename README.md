@@ -1,22 +1,19 @@
-# App Canadel V6 — Style V3
+# App Canadel V8 — Administration sécurisée
 
-Cette version restaure le visuel de la V3 (fond, cartes, proportions et style général)
-tout en conservant les fonctions récentes de l'application :
-- FR / ENG
-- Firebase / Firestore
-- administration
-- QR fusionné avec le logo Canadel
+Version basée sur V7.1 avec Firebase Authentication pour l'administration.
 
-Les expérimentations visuelles V4/V5 et les fonds de meubles ont été retirés.
+## À faire une seule fois dans Firebase
+1. Firebase Console → Authentication → Get started.
+2. Sign-in method → activer **Email/Password**.
+3. Authentication → Users → Add user → créer le compte administrateur.
+4. Firestore Database → Rules → remplacer les règles par le contenu de `firestore.rules` puis **Publish**.
+5. Mettre tous les fichiers de ce ZIP à la racine du dépôt GitHub Pages.
 
+## Sécurité V8
+- Le formulaire client reste public.
+- Le tableau de bord exige une connexion Firebase.
+- Un visiteur public ne peut plus lire la collection `receipts` avec les règles V8.
+- Les administrateurs connectés peuvent lire et modifier les données.
+- La suppression reste interdite.
 
-## V6.1 — correction iPhone
-Le visuel V3 est conservé. Sur téléphone, la grille du formulaire passe maintenant à une seule colonne afin d'éviter le chevauchement et la coupure des champs.
-
-
-## V6.2 — suivi anomalie
-Lorsqu'une réception est confirmée avec une anomalie, le client reçoit un message lui demandant de communiquer avec son vendeur. Le message est bilingue FR/EN. Aucun message supplémentaire n'est affiché lorsque « Tout est conforme » est sélectionné.
-
-
-## V6.3.1
-Correction de la V6.3 : retour à la base V6.2 fonctionnelle et ajout isolé du bouton « Voir détails » dans l'administration.
+IMPORTANT : publier `firestore.rules` dans Firebase Console est indispensable. Le fichier présent dans GitHub ne modifie pas les règles Firebase automatiquement.
