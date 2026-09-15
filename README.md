@@ -24,3 +24,8 @@ IMPORTANT : publier `firestore.rules` dans Firebase Console est indispensable. L
 - Accès privé : ajoutez `?admin=1` à l’adresse de l’application.
 - Exemple GitHub Pages : `https://benoit480.github.io/App-canadel/?admin=1`
 - Firebase Authentication et les règles Firestore restent obligatoires.
+
+V8.2 — Correctif iPhone/Safari
+- Corrige le rendu fantôme pouvant afficher deux fois la carte « Informations de commande » pendant le défilement.
+- Aucun changement au formulaire, à Firebase ou à l'administration.
+- Compatible avec Cloudflare Pages : https://candelvalid.pages.dev
