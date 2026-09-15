@@ -76,7 +76,6 @@
 .detailWide{grid-column:1/-1}
 @media(max-width:700px){.detailGrid{grid-template-columns:1fr}.detailWide{grid-column:auto}.detailModal{padding:18px!important}}
 
-.canadelHero{padding:0!important;border:0!important;background:transparent!important;overflow:hidden;border-radius:18px}.canadelHero img{display:block;width:100%;height:auto;border-radius:18px;object-fit:cover}
 
 /* V8 — administration privée */
 .loginCard{max-width:520px;margin:8vh auto;text-align:left}
@@ -89,3 +88,9 @@
   #app{position:static!important;isolation:auto!important}
   #app > .card,#app > .hero{transform:none!important;-webkit-transform:none!important;backface-visibility:visible!important;-webkit-backface-visibility:visible!important}
 }
+
+/* V8.4 — entête client simple, sans image */
+.deliveryIntro{text-align:left;padding:26px 28px!important}
+.deliveryIntro h1{margin:0 0 8px;font-size:clamp(28px,5vw,42px);line-height:1.08}
+.deliveryIntro p{margin:0;color:#a9bbcc;font-size:18px;line-height:1.45}
+@media(max-width:700px){.deliveryIntro{padding:22px!important}.deliveryIntro h1{font-size:30px}.deliveryIntro p{font-size:17px}}

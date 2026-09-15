@@ -32,3 +32,6 @@ V8.2 — Correctif iPhone/Safari
 
 
 V8.3: correctif iPhone/Safari du double rendu visuel. Retrait des calques GPU ajoutés en V8.2 et cache-busting des fichiers CSS/JS.
+
+
+V8.4 — Entête client simplifié: retrait de la grande image, conservation du bandeau Canadel/ENG et ajout d'une carte texte Confirmer ma livraison.
