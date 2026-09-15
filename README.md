@@ -35,3 +35,12 @@ V8.3: correctif iPhone/Safari du double rendu visuel. Retrait des calques GPU aj
 
 
 V8.4 — Entête client simplifié: retrait de la grande image, conservation du bandeau Canadel/ENG et ajout d'une carte texte Confirmer ma livraison.
+
+
+## V8.5 — Administration
+- Statut de réclamation modifiable directement : Nouvelle / En traitement / Traitée.
+- Couleurs de statut pour repérage rapide.
+- Bouton « Supprimer cette commande » dans Voir détails avec confirmation.
+- La suppression Firestore est permise uniquement à un utilisateur Firebase Authentication connecté.
+
+IMPORTANT : publier aussi le fichier `firestore.rules` dans Firebase Console > Firestore Database > Rules, sinon le bouton de suppression sera refusé par Firebase.

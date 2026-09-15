@@ -1,6 +1,6 @@
 import {firebaseConfig} from "./firebase-config.js";
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {getFirestore,collection,doc,getDoc,getDocs,setDoc,updateDoc,serverTimestamp,query,where} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import {getFirestore,collection,doc,getDoc,getDocs,setDoc,updateDoc,deleteDoc,serverTimestamp,query,where} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 const fb=initializeApp(firebaseConfig),db=getFirestore(fb),auth=getAuth(fb),A=document.getElementById("app");
@@ -100,7 +100,23 @@ async function admin(view){if(!auth.currentUser){adminLogin();return}document.bo
  try{let o=await getAll(); if(view==="dashboard")dashboard(o);else if(view==="receipts")receipts(o);else if(view==="claims")claims(o);else if(view==="stats")stats(o);else universalQR();wire()}catch(e){A.innerHTML=tabs(view)+`<section class="card"><p class="error">${esc(e.code||e.message)}</p></section>`;wire()}
 }
 function status(x){const ok=x.issue==="Tout est conforme"||x.issue==="compliant";const names={damaged:"Produit endommagé",missing:"Produit manquant",wrong:"Mauvais produit",other:"Autre problème"};return ok?`<span class="badge green">Conforme</span>`:`<span class="badge red">${esc(names[x.issue]||x.issue)}</span>`}
-function table(o){return `<div class="tablewrap"><table><thead><tr><th>Date</th><th>Commande</th><th>Client</th><th>État</th><th>Note</th><th>Réclamation</th><th>Détails</th></tr></thead><tbody>${o.map(x=>`<tr><td>${esc(x.receivedDate)}</td><td>${esc(x.orderNo)}</td><td>${esc(x.customer)}</td><td>${status(x)}</td><td>${x.rating||"—"}/5</td><td>${esc(x.claimStatus||"—")}</td><td><button class="secondary detailBtn" data-detail-id="${esc(x.id)}">Voir détails</button></td></tr>`).join("")}</tbody></table></div>`}
+function claimControl(x){
+ const problem=!(x.issue==="Tout est conforme"||x.issue==="compliant");
+ if(!problem)return "—";
+ const current=x.claimStatus||"Nouvelle";
+ return `<select class="claimStatusSelect claim-${current.replaceAll(" ","-").toLowerCase()}" data-claim-id="${esc(x.id)}" aria-label="Statut de réclamation">
+  ${["Nouvelle","En traitement","Traitée"].map(v=>`<option value="${v}" ${current===v?"selected":""}>${v}</option>`).join("")}
+ </select>`;
+}
+function table(o){return `<div class="tablewrap"><table><thead><tr><th>Date</th><th>Commande</th><th>Client</th><th>État</th><th>Note</th><th>Réclamation</th><th>Détails</th></tr></thead><tbody>${o.map(x=>`<tr><td>${esc(x.receivedDate)}</td><td>${esc(x.orderNo)}</td><td>${esc(x.customer)}</td><td>${status(x)}</td><td>${x.rating||"—"}/5</td><td>${claimControl(x)}</td><td><button class="secondary detailBtn" data-detail-id="${esc(x.id)}">Voir détails</button></td></tr>`).join("")}</tbody></table></div>`}
+function wireClaimStatus(){
+ document.querySelectorAll(".claimStatusSelect").forEach(sel=>sel.addEventListener("change",async()=>{
+  const value=sel.value; sel.disabled=true;
+  try{await updateDoc(doc(db,"receipts",sel.dataset.claimId),{claimStatus:value}); sel.className="claimStatusSelect claim-"+value.replaceAll(" ","-").toLowerCase();}
+  catch(e){alert("Impossible de modifier le statut : "+(e.code||e.message));}
+  finally{sel.disabled=false;}
+ }));
+}
 
 function issueLabel(v){return ({compliant:"Tout est conforme","Tout est conforme":"Tout est conforme",damaged:"Produit endommagé",missing:"Produit manquant",wrong:"Mauvais produit",other:"Autre problème"})[v]||v||"—"}
 function fullDate(v){try{return v?.toDate?v.toDate().toLocaleString("fr-CA"):v?new Date(v).toLocaleString("fr-CA"):"—"}catch(e){return "—"}}
@@ -124,17 +140,24 @@ function wireDetails(o){
      ${problem?`<div><span>Article concerné</span><b>${esc(x.problemItem||x.item||"—")}</b></div><div><span>Quantité</span><b>${esc(x.problemQty||x.qty||"—")}</b></div><div class="detailWide"><span>Description du problème</span><b>${esc(x.problemDescription||x.description||"—")}</b></div><div><span>Statut de réclamation</span><b>${esc(x.claimStatus||"Nouvelle")}</b></div>`:""}
      <div><span>Date / heure d'envoi</span><b>${esc(fullDate(x.createdAt))}</b></div>
     </div>
+    <div class="detailActions"><button type="button" class="danger deleteReceiptBtn">Supprimer cette commande</button></div>
    </section>`;
    document.body.appendChild(overlay);
    const close=()=>overlay.remove();
+   overlay.querySelector(".deleteReceiptBtn").addEventListener("click",async()=>{
+    if(!confirm(`Supprimer définitivement la commande #${x.orderNo||""} ?\n\nCette action est irréversible.`))return;
+    const delBtn=overlay.querySelector(".deleteReceiptBtn"); delBtn.disabled=true; delBtn.textContent="Suppression…";
+    try{await deleteDoc(doc(db,"receipts",x.id)); close(); const active=document.querySelector("[data-tab].active")?.dataset.tab||"receipts"; await admin(active);}
+    catch(e){delBtn.disabled=false;delBtn.textContent="Supprimer cette commande";alert("Suppression impossible : "+(e.code||e.message));}
+   });
    overlay.querySelector(".detailClose").addEventListener("click",close);
    overlay.addEventListener("click",e=>{if(e.target===overlay)close()});
   });
  });
 }
-function dashboard(o){let p=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant"),avg=o.length?(o.reduce((a,x)=>a+(+x.rating||0),0)/o.length).toFixed(1):"—";const shown=o.slice(-10).reverse();A.innerHTML=tabs("dashboard")+`<section class="stats"><div class="stat"><b>${o.length}</b>Total réceptions</div><div class="stat"><b>${o.length-p.length}</b>Conformes</div><div class="stat"><b>${p.length}</b>Avec problème</div><div class="stat"><b>${avg}</b>Satisfaction /5</div></section><section class="card"><h2>Réceptions récentes</h2>${table(shown)}</section>`;wire();wireDetails(shown)}
-function receipts(o){const shown=[...o].reverse();A.innerHTML=tabs("receipts")+`<section class="card"><h2>Réceptions</h2><input id="search" class="search" placeholder="Rechercher commande ou client…">${table(shown)}</section>`;wire();wireDetails(shown);const searchEl=document.getElementById("search");searchEl.addEventListener("input",()=>{let q=searchEl.value.toLowerCase();document.querySelectorAll("tbody tr").forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?"":"none")})}
-function claims(o){let c=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant").reverse();A.innerHTML=tabs("claims")+`<section class="card"><h2>Réclamations</h2>${c.length?table(c):'<p class="muted">Aucune réclamation.</p>'}</section>`;wire();wireDetails(c)}
+function dashboard(o){let p=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant"),avg=o.length?(o.reduce((a,x)=>a+(+x.rating||0),0)/o.length).toFixed(1):"—";const shown=o.slice(-10).reverse();A.innerHTML=tabs("dashboard")+`<section class="stats"><div class="stat"><b>${o.length}</b>Total réceptions</div><div class="stat"><b>${o.length-p.length}</b>Conformes</div><div class="stat"><b>${p.length}</b>Avec problème</div><div class="stat"><b>${avg}</b>Satisfaction /5</div></section><section class="card"><h2>Réceptions récentes</h2>${table(shown)}</section>`;wire();wireDetails(shown);wireClaimStatus()}
+function receipts(o){const shown=[...o].reverse();A.innerHTML=tabs("receipts")+`<section class="card"><h2>Réceptions</h2><input id="search" class="search" placeholder="Rechercher commande ou client…">${table(shown)}</section>`;wire();wireDetails(shown);wireClaimStatus();const searchEl=document.getElementById("search");searchEl.addEventListener("input",()=>{let q=searchEl.value.toLowerCase();document.querySelectorAll("tbody tr").forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?"":"none")})}
+function claims(o){let c=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant").reverse();A.innerHTML=tabs("claims")+`<section class="card"><h2>Réclamations</h2>${c.length?table(c):'<p class="muted">Aucune réclamation.</p>'}</section>`;wire();wireDetails(c);wireClaimStatus()}
 function stats(o){let p=o.filter(x=>x.issue!=="Tout est conforme"&&x.issue!=="compliant"),avg=o.length?(o.reduce((a,x)=>a+(+x.rating||0),0)/o.length).toFixed(1):"—";A.innerHTML=tabs("stats")+`<section class="stats"><div class="stat"><b>${o.length}</b>Réceptions</div><div class="stat"><b>${avg}</b>Note moyenne</div><div class="stat"><b>${p.length}</b>Problèmes</div><div class="stat"><b>${o.length?Math.round(p.length/o.length*100):0}%</b>Taux de problème</div></section>`;wire()}
 
 async function buildBrandedQR(url){

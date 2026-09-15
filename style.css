@@ -94,3 +94,14 @@
 .deliveryIntro h1{margin:0 0 8px;font-size:clamp(28px,5vw,42px);line-height:1.08}
 .deliveryIntro p{margin:0;color:#a9bbcc;font-size:18px;line-height:1.45}
 @media(max-width:700px){.deliveryIntro{padding:22px!important}.deliveryIntro h1{font-size:30px}.deliveryIntro p{font-size:17px}}
+
+
+/* V8.5 — gestion des réclamations et suppression admin */
+.claimStatusSelect{min-width:145px;width:auto!important;padding:9px 34px 9px 11px!important;border-radius:10px!important;font-weight:800!important;color:#fff!important}
+.claim-nouvelle{background:#6b2b30!important;border-color:#9b4149!important}
+.claim-en-traitement{background:#725b16!important;border-color:#b18e25!important}
+.claim-traitée{background:#1e603f!important;border-color:#32835a!important}
+.detailActions{display:flex;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid #29465b}
+.deleteReceiptBtn{width:auto!important;background:#8b2630!important;border-color:#b43b47!important;color:#fff!important}
+.deleteReceiptBtn:disabled{opacity:.6}
+@media(max-width:700px){.claimStatusSelect{min-width:138px;font-size:14px!important}.detailActions .deleteReceiptBtn{width:100%!important}}
