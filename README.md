@@ -45,7 +45,10 @@ V8.4 — Entête client simplifié: retrait de la grande image, conservation du 
 
 IMPORTANT : publier aussi le fichier `firestore.rules` dans Firebase Console > Firestore Database > Rules, sinon le bouton de suppression sera refusé par Firebase.
 
-## V8.6
+## V8.7
 - Corrige le défilement de la fenêtre Détails de la réception sur iPhone/Safari.
 - Le contenu peut maintenant défiler jusqu'au bouton de suppression.
 - Aucun changement aux données Firebase ni au formulaire client.
+
+
+V8.7 : déconnexion renvoie à la page de connexion administrateur; impression du QR reliée explicitement à window.print() pour Safari/iPhone.
