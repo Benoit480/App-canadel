@@ -187,19 +187,41 @@ async function buildBrandedQR(url){
 
 async function universalQR(){
  let url=location.origin+location.pathname;
- A.innerHTML=tabs("qr")+`<section class="card printSheet"><h1>Scannez ici</h1><p>Confirmez votre livraison Canadel</p><div class="qrbox"><img id="finalQR" class="qr" alt="QR universel Canadel" style="display:block;width:300px;height:300px"></div><p class="muted">${esc(url)}</p><div class="actions noPrint"><button id="printQrBtn" class="blue" type="button">Imprimer le QR universel</button></div><p><b>Un seul QR pour toutes les boîtes.</b></p></section>`;
+ A.innerHTML=tabs("qr")+`<section class="card printSheet"><h1>Scannez ici</h1><p>Confirmez votre livraison Canadel</p><div class="qrbox"><img id="finalQR" class="qr" alt="QR universel Canadel" style="display:block;width:300px;height:300px"></div><p class="muted">${esc(url)}</p><div class="actions noPrint"><button id="printQrBtn" class="blue" type="button" disabled>Imprimer le QR universel</button><button id="downloadQrBtn" class="secondary" type="button" disabled>Enregistrer le QR</button></div><p><b>Un seul QR pour toutes les boîtes.</b></p></section>`;
  wire();
+ const finalQR=document.getElementById("finalQR");
  const printBtn=document.getElementById("printQrBtn");
- if(printBtn){
-   printBtn.addEventListener("click",()=>{
-     requestAnimationFrame(()=>window.print());
-   });
- }
+ const downloadBtn=document.getElementById("downloadQrBtn");
  try{
    const finalSrc=await buildBrandedQR(url);
-   document.getElementById("finalQR").src=finalSrc;
+   finalQR.src=finalSrc;
+   printBtn.disabled=false;
+   downloadBtn.disabled=false;
+
+   // Impression fiable : crée une page dédiée au QR au moment du clic.
+   printBtn.addEventListener("click",()=>{
+     const w=window.open("","_blank");
+     if(!w){
+       alert("La fenêtre d’impression a été bloquée. Autorisez les fenêtres surgissantes pour ce site, puis réessayez.");
+       return;
+     }
+     w.document.open();
+     w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>QR Canadel</title><style>@page{margin:12mm}body{font-family:Arial,sans-serif;text-align:center;margin:0;padding:24px;color:#000;background:#fff}h1{margin:0 0 8px}p{margin:8px 0 18px}.qr{width:min(78vw,520px);height:auto}.url{font-size:12px;word-break:break-all;margin-top:16px}@media print{body{padding:0}}</style></head><body><h1>Scannez ici</h1><p>Confirmez votre livraison Canadel</p><img class="qr" src="${finalSrc}" alt="QR Canadel"><div class="url">${esc(url)}</div><script>window.addEventListener('load',function(){setTimeout(function(){window.print();},250)});<\/script></body></html>`);
+     w.document.close();
+   });
+
+   downloadBtn.addEventListener("click",()=>{
+     const a=document.createElement("a");
+     a.href=finalSrc;
+     a.download="QR-Canadel.png";
+     document.body.appendChild(a);
+     a.click();
+     a.remove();
+   });
  }catch(e){
-   document.getElementById("finalQR").alt="Impossible de générer le QR";
+   finalQR.alt="Impossible de générer le QR";
+   printBtn.disabled=true;
+   downloadBtn.disabled=true;
    console.error(e);
  }
 }
